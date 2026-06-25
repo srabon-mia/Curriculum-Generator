@@ -5,7 +5,7 @@ export default function LandingPage() {
     <main className="min-h-screen bg-[#FAFAF7] text-[#1A1A18]">
       {/* Nav */}
       <nav className="border-b border-[#E7E3D7] px-6 py-4 flex items-center justify-between">
-        <span className="font-serif text-lg">Curio</span>
+        <span className="font-serif text-lg">Curriculum Generator</span>
         <div className="flex items-center gap-4">
           <Link
             href="/curriculum"
@@ -83,7 +83,7 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="border-t border-[#E7E3D7] px-6 py-6 text-xs text-[#8A8578] flex items-center justify-between">
-        <span>Curio — human-curated study guides</span>
+        <span>Curriculum Generator — human-curated study guides</span>
         <Link href="/curriculum" className="hover:text-[#1A1A18] transition">
           Browse →
         </Link>
