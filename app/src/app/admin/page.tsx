@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getCurricula } from "@/lib/curriculum-data";
+import { LogoutButton } from "@/components/LogoutButton";
 
 export const dynamic = "force-dynamic";
 
@@ -9,11 +10,14 @@ export default async function AdminHome() {
   return (
     <main className="min-h-full bg-[#FAFAF7] text-[#1A1A18]">
       <div className="mx-auto max-w-3xl px-6 py-16">
-        <header className="mb-12">
-          <p className="text-xs uppercase tracking-[0.18em] text-[#8A8578] mb-2">
-            Curriculum Builder · Admin
-          </p>
-          <h1 className="font-serif text-3xl leading-tight">Your curricula</h1>
+        <header className="mb-12 flex items-start justify-between">
+          <div>
+            <p className="text-xs uppercase tracking-[0.18em] text-[#8A8578] mb-2">
+              Curriculum Builder · Admin
+            </p>
+            <h1 className="font-serif text-3xl leading-tight">Your curricula</h1>
+          </div>
+          <LogoutButton />
         </header>
 
         {curricula.length === 0 ? (
