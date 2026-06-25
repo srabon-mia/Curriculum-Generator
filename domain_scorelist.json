@@ -1,0 +1,96 @@
+{
+  "scoring_notes": "Scores are 1-5, NOT a hard whitelist -- unscored/unknown domains default to score 2 and are still surfaced, just ranked lower. Scoped to the LEGACY 10-topic Physical Setting/Chemistry curriculum (see PHASE_0_SCOPE.md) -- chosen specifically because resource availability for this older format is much deeper than the new NYSSLS exam. This list is meant to grow over time based on what actually shows up in real search results during Phase 5, not be exhaustive on day one.",
+  "domains": [
+    {
+      "domain": "nysed.gov",
+      "score": 5,
+      "category": "official_source",
+      "notes": "The source of truth for the curriculum itself, past exams, reference tables, scoring guides. Always trust structural claims from here over any third party. Note: NYSED's own site is increasingly oriented toward the NEW exam -- past PHYSICAL SETTING/Chemistry exams (the old format) may need to be pulled from the Regents Examination archive specifically, not the current exam landing page."
+    },
+    {
+      "domain": "jmap.org",
+      "score": 5,
+      "category": "practice_problems",
+      "notes": "THE key resource for this scope. Jmap's whole practice-question library is organized around the old topic-tagged Regents format -- exactly matches our node structure (Atomic Concepts, Periodic Table, Stoichiometry, etc.) with worked solutions per question. Verify license/reuse terms before embedding vs. linking; default link_only until confirmed."
+    },
+    {
+      "domain": "regentsprep.org",
+      "score": 5,
+      "category": "review_site",
+      "notes": "Confirmed via search: commonly recommended alongside Khan Academy specifically for Regents Chemistry topic coverage. Long-standing, teacher-built, organized around the OLD 10-topic structure. Link-only unless license confirmed."
+    },
+    {
+      "domain": "mrpalermo.com",
+      "score": 5,
+      "category": "review_site_cc_licensed",
+      "notes": "VERIFIED CC BY-NC-SA 4.0 licensed (confirmed via direct page content) -- a real embed-eligible source, not just link-only. 'Mr. Palermo's Flipped Chemistry Classroom' has review videos, past exams with explanations, and review problems organized by topic. Good first candidate to test the embed pipeline against in Phase 2."
+    },
+    {
+      "domain": "newyorkscienceteacher.com",
+      "score": 3,
+      "category": "review_site",
+      "notes": "Aggregates old-format Regents Chemistry review games and digitized past questions. Useful breadth but verify individual page licensing before embedding -- appears to be a personal/community site, not institutional."
+    },
+    {
+      "domain": "openstax.org",
+      "score": 5,
+      "category": "textbook",
+      "notes": "CC BY licensed -- safe to embed excerpts. OpenStax Chemistry 2e is the relevant text, topic-agnostic to old/new exam format."
+    },
+    {
+      "domain": "khanacademy.org",
+      "score": 4,
+      "category": "video_explainer",
+      "notes": "High quality, well-sequenced, but not CC-licensed for embedding content directly -- link out."
+    },
+    {
+      "domain": "chem.libretexts.org",
+      "score": 4,
+      "category": "textbook",
+      "notes": "Open educational resource, much of it CC-licensed -- check per-page license tag, varies by contributing author."
+    },
+    {
+      "domain": "ocw.mit.edu",
+      "score": 5,
+      "category": "course_material",
+      "notes": "Mostly CC BY-NC-SA. Good for the harder/deeper material since MIT OCW intro chem can supply the 'far more difficult' layer Shafiq wants for specialized HS rigor, layered on top of Regents-level topic nodes."
+    },
+    {
+      "domain": "acs.org",
+      "score": 4,
+      "category": "professional_org",
+      "notes": "American Chemical Society -- authoritative but mostly link-only, member-gated content common."
+    },
+    {
+      "domain": "ptable.com",
+      "score": 4,
+      "category": "reference_tool",
+      "notes": "Interactive periodic table reference, useful embedded tool link for Topic 2 (Periodic Table) nodes."
+    },
+    {
+      "domain": "youtube.com",
+      "score": 3,
+      "category": "video",
+      "notes": "Scored per-channel in practice, not per-domain -- this is a placeholder default. Channels like 'Chemistry by Hein' or 'Najam Academy' style Regents-specific reviewers worth seeking out at the channel level once Phase 5 search runs. Always embed via iframe, never transcript-scrape."
+    },
+    {
+      "domain": "ck12.org",
+      "score": 4,
+      "category": "textbook_practice",
+      "notes": "Open content, has practice problems with adjustable difficulty -- worth checking license terms per resource type (text vs. interactive)."
+    },
+    {
+      "domain": "sites.google.com/view/tingchemistry",
+      "score": 5,
+      "category": "teacher_course_site",
+      "notes": "VERIFIED via direct fetch: real Stuyvesant chemistry teacher (confirmed by @schools.nyc.gov email on site), 'Honors Chemistry' level -- matches our specialized-HS rigor target directly. 98 lessons across 13 units, full textbook PDF, reference table PDF, and a dedicated Regents Prep section (mini + in-depth study guides, topic-organized review folder). Best single match found so far for 'harder than standard Regents, sequenced like Regents' resources. CAVEATS: (1) all content is hosted as individual Google Drive file links, not on the site itself -- link rot risk if the teacher reorganizes his Drive, worth periodic validity checks; (2) no license stated anywhere -- default strictly to link_only, never embed, this is personal teaching material not published for reuse; (3) his unit numbering (e.g. 'Unit 1: Matter and the Atom' spanning Ch.1-3) does not map 1:1 onto the NYSED 10-topic split -- needs manual mapping to our nodes rather than automatic topic-string matching."
+    },
+    {
+      "domain": "chemistryregents.com",
+      "score": 1,
+      "category": "third_party_study_app",
+      "notes": "NOT NYSED-affiliated (says so in its own footer), and explicitly built for the NEW NYSSLS exam format, not our chosen scope. Deprioritized -- if it surfaces in search results for old-format topics, treat with extra suspicion since it may mix in new-exam content that doesn't match this curriculum's structure."
+    }
+  ]
+}
+

@@ -1,0 +1,210 @@
+{
+  "curriculum": {
+    "title": "NYS Regents Physical Setting/Chemistry (legacy 10-topic Core Curriculum)",
+    "subject": "chemistry",
+    "source_type": "adapted",
+    "source_attribution": "NYSED Physical Setting/Chemistry Core Curriculum",
+    "source_url": "https://www.nysed.gov/sites/default/files/programs/curriculum-instruction/chemist.pdf",
+    "notes": "Topic structure and major understandings are official NYSED content (Appendix A), transcribed from source. NYSED explicitly states these ten topics 'may be used for ease in curriculum writing; however, they do not connote a suggested scope and sequence' -- ordering and resource curation for specialized-HS tutoring rigor is layered on top by Shafiq."
+  },
+  "nodes": [
+    {
+      "node_id": "topic-1",
+      "title": "Atomic Concepts",
+      "order_index": 1,
+      "major_understandings": [
+        { "key": "I.1", "code": "3.1a", "description": "The modern model of the atom has evolved over a long period of time through the work of many scientists." },
+        { "key": "I.2", "code": "3.1b", "description": "Each atom has a nucleus, with an overall positive charge, surrounded by one or more negatively charged electrons." },
+        { "key": "I.3", "code": "3.1c", "description": "Subatomic particles contained in the nucleus include protons and neutrons." },
+        { "key": "I.4", "code": "3.1d", "description": "The proton is positively charged, and the neutron has no charge. The electron is negatively charged." },
+        { "key": "I.5", "code": "3.1e", "description": "Protons and electrons have equal but opposite charges. The number of protons equals the number of electrons in an atom." },
+        { "key": "I.6", "code": "3.1f", "description": "The mass of each proton and each neutron is approximately equal to one atomic mass unit. An electron is much less massive than a proton or a neutron." },
+        { "key": "I.7", "code": "3.1h", "description": "In the wave-mechanical model (electron cloud model), the electrons are in orbitals, defined as the regions of most probable electron location (ground state)." },
+        { "key": "I.8", "code": "3.1i", "description": "Each electron in an atom has its own distinct amount of energy." },
+        { "key": "I.9", "code": "3.1j", "description": "When an electron in an atom gains a specific amount of energy, the electron is at a higher energy state (excited state)." },
+        { "key": "I.10", "code": "3.1k", "description": "When an electron returns from a higher energy state to a lower energy state, a specific amount of energy is emitted. This emitted energy can be used to identify an element." },
+        { "key": "I.11", "code": "3.1l", "description": "The outermost electrons in an atom are called the valence electrons. The number of valence electrons generally affects the chemical properties of an element." },
+        { "key": "I.12", "code": "3.1m", "description": "Atoms of an element that contain the same number of protons but a different number of neutrons are called isotopes of that element." },
+        { "key": "I.13", "code": "3.1n", "description": "The average atomic mass of an element is the weighted average of the masses of its naturally occurring isotopes." }
+      ],
+      "real_world_connections": ["flame tests", "neon lights", "fireworks", "forensic analysis", "spectral analysis of stars", "lasers"],
+      "resources": []
+    },
+    {
+      "node_id": "topic-2",
+      "title": "Periodic Table",
+      "order_index": 2,
+      "major_understandings": [
+        { "key": "II.1", "code": "3.1y", "description": "The placement or location of an element on the Periodic Table gives an indication of physical and chemical properties of that element. Elements are arranged in order of increasing atomic number." },
+        { "key": "II.2", "code": "3.1g", "description": "The number of protons in an atom (atomic number) identifies the element. The sum of protons and neutrons (mass number) identifies an isotope." },
+        { "key": "II.3", "code": "3.1v", "description": "Elements can be classified by their properties and located on the Periodic Table as metals, nonmetals, metalloids (B, Si, Ge, As, Sb, Te), and noble gases." },
+        { "key": "II.4", "code": "3.1w", "description": "Elements can be differentiated by physical properties such as density, conductivity, malleability, solubility, and hardness." },
+        { "key": "II.5", "code": "3.1x", "description": "Elements can be differentiated by chemical properties, describing how an element behaves during a chemical reaction." },
+        { "key": "II.6", "code": "5.2f", "description": "Some elements exist in two or more forms in the same phase, differing in molecular or crystal structure and properties." },
+        { "key": "II.7", "code": "3.1z", "description": "For Groups 1, 2, and 13-18, elements within the same group have the same number of valence electrons (helium is an exception) and therefore similar chemical properties." },
+        { "key": "II.8", "code": "3.1aa", "description": "The succession of elements within the same group demonstrates characteristic trends: atomic radius, ionic radius, electronegativity, first ionization energy, metallic/nonmetallic properties." },
+        { "key": "II.9", "code": "3.1bb", "description": "The succession of elements across the same period demonstrates the same characteristic trends." }
+      ],
+      "real_world_connections": ["similar properties/uses for elements in the same family", "semiconductors in solid state electronics", "alloys as superconductors", "metallurgy", "recovery of metals", "allotropes (oxygen gas vs. ozone; coal vs. graphite vs. diamond)"],
+      "resources": []
+    },
+    {
+      "node_id": "topic-3",
+      "title": "Moles/Stoichiometry",
+      "order_index": 3,
+      "major_understandings": [
+        { "key": "III.1", "code": "3.1cc", "description": "A compound is composed of two or more different elements chemically combined in a fixed proportion, represented by a chemical formula and named via IUPAC." },
+        { "key": "III.2", "code": "3.1ee", "description": "Types of chemical formulas include empirical, molecular, and structural." },
+        { "key": "III.3", "code": "3.3d", "description": "The empirical formula is the simplest whole-number ratio of atoms; may differ from the molecular formula." },
+        { "key": "III.4", "code": "3.3a", "description": "In all chemical reactions there is conservation of mass, energy, and charge." },
+        { "key": "III.5", "code": "3.3c", "description": "A balanced chemical equation represents conservation of atoms; coefficients determine mole ratios." },
+        { "key": "III.6", "code": "3.3e", "description": "Formula mass is the sum of atomic masses; molar mass (gram-formula mass) equals one mole of a substance." },
+        { "key": "III.7", "code": "3.3f", "description": "The percent composition by mass of each element in a compound can be calculated mathematically." },
+        { "key": "III.8", "code": "3.2b", "description": "Types of chemical reactions include synthesis, decomposition, single replacement, and double replacement." }
+      ],
+      "real_world_connections": ["reading food/beverage labels", "recovery of metals from ores", "electroplating", "corrosion", "precipitation reactions", "dangers of mixing household chemicals (bleach + ammonia)", "airbag inflation explosives"],
+      "resources": []
+    },
+    {
+      "node_id": "topic-4",
+      "title": "Chemical Bonding",
+      "order_index": 4,
+      "major_understandings": [
+        { "key": "IV.1", "code": "3.1dd", "description": "Compounds can be differentiated by their chemical and physical properties." },
+        { "key": "IV.2", "code": "5.2g", "description": "Two major categories of compounds are ionic and molecular (covalent) compounds." },
+        { "key": "IV.3", "code": "5.2a", "description": "Chemical bonds are formed when valence electrons are transferred (ionic), shared (covalent), or mobile within a metal (metallic)." },
+        { "key": "IV.4", "code": "5.2e", "description": "In a multiple covalent bond, more than one pair of electrons are shared between two atoms." },
+        { "key": "IV.5", "code": "5.2l", "description": "Molecular polarity is determined by molecular shape and charge distribution. Symmetrical (nonpolar): CO2, CH4, diatomics. Asymmetrical (polar): HCl, NH3, H2O." },
+        { "key": "IV.6", "code": "5.2c", "description": "Gaining electrons forms a negative ion with increased radius; losing electrons forms a positive ion with decreased radius." },
+        { "key": "IV.7", "code": "5.2i", "description": "When a bond is broken, energy is absorbed. When a bond is formed, energy is released." },
+        { "key": "IV.8", "code": "5.2b", "description": "Atoms attain a stable valence electron configuration by bonding. Noble gases have stable configurations and tend not to bond." },
+        { "key": "IV.9", "code": "5.2n", "description": "Physical properties (conductivity, malleability, solubility, hardness, melting/boiling point) can be explained via bonds and intermolecular forces." },
+        { "key": "IV.10", "code": "5.2d", "description": "Electron-dot diagrams (Lewis structures) represent valence electron arrangement in elements, compounds, and ions." },
+        { "key": "IV.11", "code": "5.2j", "description": "Electronegativity indicates how strongly an atom attracts electrons in a bond." },
+        { "key": "IV.12", "code": "5.2k", "description": "The electronegativity difference between two bonded atoms assesses bond polarity." },
+        { "key": "IV.13", "code": "5.2h", "description": "Metals + nonmetals tend to form ionic compounds; nonmetal + nonmetal forms molecular (covalent) compounds; polyatomic ions involve both bonding types." }
+      ],
+      "real_world_connections": ["photosynthesis", "DNA bonding", "saturated vs unsaturated compounds (health)", "free radicals"],
+      "resources": []
+    },
+    {
+      "node_id": "topic-5",
+      "title": "Physical Behavior of Matter",
+      "order_index": 5,
+      "major_understandings": [
+        { "key": "V.1", "code": "3.1q", "description": "Matter is classified as a pure substance or as a mixture of substances." },
+        { "key": "V.2", "code": "3.1kk", "description": "The three phases of matter (solids, liquids, gases) have different properties." },
+        { "key": "V.3", "code": "3.1r", "description": "A pure substance has constant composition and properties throughout a sample and from sample to sample." },
+        { "key": "V.4", "code": "3.1u", "description": "Elements are composed of atoms with the same atomic number and cannot be broken down by chemical change." },
+        { "key": "V.5", "code": "3.1s", "description": "Mixtures are two or more substances separable by physical means, forming homogeneous or heterogeneous mixtures." },
+        { "key": "V.6", "code": "3.1t", "description": "The proportions of components in a mixture can be varied; each component retains its original properties." },
+        { "key": "V.7", "code": "3.1nn", "description": "Differences in density, particle size, polarity, boiling/freezing point, and solubility permit physical separation of mixtures." },
+        { "key": "V.8", "code": "3.1oo", "description": "A solution is a homogeneous mixture of solute dissolved in solvent; solubility depends on temperature, pressure, and chemical nature." },
+        { "key": "V.9", "code": "3.1pp", "description": "Solution concentration may be expressed as molarity (M), percent by volume, percent by mass, or ppm." },
+        { "key": "V.10", "code": "3.1qq", "description": "A nonvolatile solute raises a solvent's boiling point and lowers its freezing point; effect scales with solute concentration." },
+        { "key": "V.14", "code": "3.4a", "description": "The ideal gas concept models gas behavior; a real gas behaves most ideally at low pressure and high temperature." },
+        { "key": "V.15", "code": "3.4b", "description": "Kinetic molecular theory (KMT) for an ideal gas: random constant straight-line motion, negligible particle volume, no attractive forces, energy-conserving collisions." },
+        { "key": "V.16", "code": "3.4d", "description": "Collision theory: a reaction is most likely when reactant particles collide with proper energy and orientation." },
+        { "key": "V.20", "code": "3.2a", "description": "A physical change rearranges existing particles; a chemical change forms different substances with changed properties." },
+        { "key": "V.21", "code": "4.1b", "description": "Chemical and physical changes can be exothermic or endothermic." }
+      ],
+      "real_world_connections": ["alloys", "filtration/distillation/chromatography", "water quality testing", "colloids", "ice cream emulsifiers", "salting icy sidewalks", "antifreeze", "calorimetry", "refrigeration", "surface tension/capillary action"],
+      "resources": []
+    },
+    {
+      "node_id": "topic-6",
+      "title": "Kinetics/Equilibrium",
+      "order_index": 6,
+      "major_understandings": [
+        { "key": "VI.1", "code": "3.4d", "description": "Collision theory: reaction likelihood depends on proper collision energy and orientation." },
+        { "key": "VI.2", "code": "3.4f", "description": "Reaction rate depends on temperature, concentration, nature of reactants, surface area, and presence of a catalyst." },
+        { "key": "VI.3", "code": "3.4h", "description": "Some chemical and physical changes can reach equilibrium." },
+        { "key": "VI.4", "code": "3.4i", "description": "At equilibrium, forward and reverse reaction rates are equal; measurable quantities remain constant." },
+        { "key": "VI.5", "code": "3.4j", "description": "LeChatelier's principle predicts the effect of stress (pressure, volume, concentration, temperature changes) on equilibrium." },
+        { "key": "VI.6", "code": "4.1c", "description": "Energy released or absorbed by a reaction can be represented by a potential energy diagram." },
+        { "key": "VI.7", "code": "4.1d", "description": "Heat of reaction equals the difference between potential energy of products and reactants." },
+        { "key": "VI.8", "code": "3.4g", "description": "A catalyst provides an alternate reaction pathway with lower activation energy." },
+        { "key": "VI.9", "code": "3.1ll", "description": "Entropy measures the randomness/disorder of a system; greater disorder means greater entropy." },
+        { "key": "VI.10", "code": "3.1mm", "description": "Systems in nature tend toward lower energy and higher entropy." }
+      ],
+      "real_world_connections": ["Haber process", "synthesis of compounds", "catalysts and inhibitors", "burning fossil fuels", "photosynthesis", "photochemical smog", "enzymes in the human body"],
+      "resources": []
+    },
+    {
+      "node_id": "topic-7",
+      "title": "Organic Chemistry",
+      "order_index": 7,
+      "major_understandings": [
+        { "key": "VII.1", "code": "3.1ff", "description": "Organic compounds contain carbon atoms bonded in chains, rings, and networks; named via IUPAC." },
+        { "key": "VII.2", "code": "3.1gg", "description": "Hydrocarbons contain only carbon and hydrogen; saturated = only single C-C bonds, unsaturated = at least one multiple C-C bond." },
+        { "key": "VII.3", "code": "3.1hh", "description": "Organic acids, alcohols, esters, aldehydes, ketones, ethers, halides, amines, amides, and amino acids are categories differing by functional groups." },
+        { "key": "VII.4", "code": "3.1ii", "description": "Isomers have the same molecular formula but different structures and properties." },
+        { "key": "VII.5", "code": "5.2e", "description": "Unsaturated organic compounds contain at least one double or triple bond (multiple covalent bond)." },
+        { "key": "VII.6", "code": "3.2c", "description": "Types of organic reactions: addition, substitution, polymerization, esterification, fermentation, saponification, combustion." }
+      ],
+      "real_world_connections": [],
+      "resources": []
+    },
+    {
+      "node_id": "topic-8",
+      "title": "Oxidation-Reduction",
+      "order_index": 8,
+      "major_understandings": [
+        { "key": "VIII.1", "code": "3.2d", "description": "An oxidation-reduction (redox) reaction involves the transfer of electrons." },
+        { "key": "VIII.2", "code": "3.2e", "description": "Reduction is the gain of electrons." },
+        { "key": "VIII.3", "code": "3.2f", "description": "A half-reaction can be written to represent reduction." },
+        { "key": "VIII.4", "code": "3.2g", "description": "Oxidation is the loss of electrons." },
+        { "key": "VIII.5", "code": "3.2h", "description": "A half-reaction can be written to represent oxidation." },
+        { "key": "VIII.6", "code": "3.3b", "description": "In a redox reaction, the number of electrons lost equals the number gained." },
+        { "key": "VIII.7", "code": "3.2i", "description": "Oxidation numbers can be assigned to atoms and ions; changes indicate oxidation/reduction occurred." },
+        { "key": "VIII.8", "code": "3.2j", "description": "An electrochemical cell is voltaic or electrolytic; oxidation occurs at the anode, reduction at the cathode." },
+        { "key": "VIII.9", "code": "3.2k", "description": "A voltaic cell spontaneously converts chemical energy to electrical energy." },
+        { "key": "VIII.10", "code": "3.2l", "description": "An electrolytic cell requires electrical energy to produce chemical change (electrolysis)." }
+      ],
+      "real_world_connections": [],
+      "resources": []
+    },
+    {
+      "node_id": "topic-9",
+      "title": "Acids, Bases, and Salts",
+      "order_index": 9,
+      "major_understandings": [
+        { "key": "IX.1", "code": "3.1uu", "description": "Behavior of many acids and bases can be explained by the Arrhenius theory; Arrhenius acids and bases are electrolytes." },
+        { "key": "IX.2", "code": "3.1rr", "description": "An electrolyte, dissolved in water, forms a solution capable of conducting electric current, dependent on ion concentration." },
+        { "key": "IX.3", "code": "3.1vv", "description": "Arrhenius acids yield H+ (aq) as the only positive ion, also written as H3O+ (aq), hydronium ion." },
+        { "key": "IX.4", "code": "3.1ww", "description": "Arrhenius bases yield OH- (aq) as the only negative ion in aqueous solution." },
+        { "key": "IX.5", "code": "3.1xx", "description": "In neutralization, an Arrhenius acid and base react to form a salt and water." },
+        { "key": "IX.6", "code": "3.1zz", "description": "Titration uses a solution of known concentration to determine the concentration of another solution." },
+        { "key": "IX.7", "code": "3.1yy", "description": "Alternate acid-base theory: an acid is an H+ donor and a base is an H+ acceptor." },
+        { "key": "IX.8", "code": "3.1ss", "description": "Acidity/alkalinity is measured by pH value; relative levels are shown using indicators." },
+        { "key": "IX.9", "code": "3.1tt", "description": "On the pH scale, each decrease of one unit represents a tenfold increase in hydronium ion concentration." }
+      ],
+      "real_world_connections": [],
+      "resources": []
+    },
+    {
+      "node_id": "topic-10",
+      "title": "Nuclear Chemistry",
+      "order_index": 10,
+      "major_understandings": [
+        { "key": "X.1", "code": "3.1o", "description": "Isotope stability depends on the neutron-to-proton ratio; unstable nuclei spontaneously decay, emitting radiation." },
+        { "key": "X.2", "code": "4.4a", "description": "Each radioactive isotope has a specific mode and rate of decay (half-life)." },
+        { "key": "X.3", "code": "5.3a", "description": "Transmutation converts one element's nucleus to another, naturally or via bombardment with high-energy particles." },
+        { "key": "X.4", "code": "3.1p", "description": "Spontaneous decay can release alpha particles, beta particles, positrons, and/or gamma radiation, differing in mass, charge, and penetrating power." },
+        { "key": "X.5", "code": "4.4b", "description": "Nuclear reactions include natural and artificial transmutation, fission, and fusion." },
+        { "key": "X.6", "code": "4.4f", "description": "There are benefits and risks associated with fission and fusion reactions." },
+        { "key": "X.7", "code": "4.4c", "description": "Nuclear reactions can be represented by equations using nuclei, subatomic particle, and emission symbols." },
+        { "key": "X.8", "code": "5.3b", "description": "Energy released in fission or fusion comes from the fractional mass converted into energy." },
+        { "key": "X.9", "code": "5.3c", "description": "Energy released during nuclear reactions is much greater than during chemical reactions." },
+        { "key": "X.10", "code": "4.4e", "description": "Risks of radioactivity include biological exposure, long-term storage/disposal, and nuclear accidents." },
+        { "key": "X.11", "code": "4.4d", "description": "Beneficial uses include medicine, industrial chemistry, radioactive dating, tracing, measurement, nuclear power, and disease detection/treatment (e.g. I-131, C-14, U-238, Co-60)." }
+      ],
+      "real_world_connections": ["I-131 for thyroid disorders", "C-14 dating of organisms", "U-238 to Pb-206 dating of geological formations", "Co-60 cancer treatment"],
+      "resources": []
+    }
+  ],
+  "exam_format": {
+    "note": "Legacy Physical Setting/Chemistry format (Regents exam predating the 2026 NYSSLS redesign). Exact current-year question count/format details should be verified against a recent past exam (e.g. via Jmap) rather than assumed static, since this is the retired-but-still-widely-resourced version.",
+    "lab_requirement": "1200 minutes of laboratory experience with satisfactory reports on file is a prerequisite for admission to the exam. Minimum 280 minutes/week of class+lab time recommended. A separate laboratory performance test (assessing Standards 1, 2, 4, 6, 7) is required prior to the written exam."
+  }
+}
