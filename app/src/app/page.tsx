@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { GenerateForm } from "../components/GenerateForm";
 
 export default function LandingPage() {
   return (
@@ -31,24 +34,12 @@ export default function LandingPage() {
           Study guides built from real resources
         </h1>
         <p className="text-lg text-[#5A564A] leading-relaxed mb-10">
-          Every resource here was found and vetted by a real teacher — no
-          AI-generated content. Just the best existing explanations, videos,
-          and practice problems, organized by topic.
+          Type a subject and we'll build you a full curriculum from the best
+          existing resources on the internet — no AI-generated content, just
+          real explanations, videos, and practice problems.
         </p>
-        <div className="flex items-center gap-4">
-          <Link
-            href="/curriculum"
-            className="px-6 py-3 rounded-md bg-[#1A1A18] text-white text-sm hover:bg-[#3D3A30] transition"
-          >
-            Browse curricula
-          </Link>
-          <Link
-            href="/curriculum"
-            className="text-sm text-[#8A8578] hover:text-[#1A1A18] transition"
-          >
-            NYS Regents Chemistry →
-          </Link>
-        </div>
+
+        <GenerateForm />
       </div>
 
       {/* How it works */}
