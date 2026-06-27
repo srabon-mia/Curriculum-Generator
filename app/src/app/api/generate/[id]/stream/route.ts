@@ -262,13 +262,15 @@ export async function GET(
                 await supabase.from("resources").insert(resources);
               }
             }
-          } catch {
-            // Continue to next topic if this one fails
+          } catch (err) {
+            console.log(`Resource discovery failed for topic "${node.title}":`, err);
+            // Continue to next topic
           }
 
           // Delay between topics to avoid rate limiting
+          // 45s gives the token bucket time to refill between web search calls
           if (i < nodeIds.length - 1) {
-            await new Promise((r) => setTimeout(r, 15000));
+            await new Promise((r) => setTimeout(r, 45000));
           }
         }
 
