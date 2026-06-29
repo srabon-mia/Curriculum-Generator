@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect  } from "react";
 import type { NodeWithChildren, Resource } from "@/lib/curriculum-data";
 
 const RESOURCE_TYPE_LABEL: Record<string, string> = {
@@ -62,14 +62,82 @@ function ResourceLink({ resource }: { resource: Resource }) {
 
 export function CurriculumViewer({
   nodes,
-  resourcesByTarget,
+  resourcesByTarget: initialResourcesByTarget,
 }: {
   nodes: NodeWithChildren[];
   resourcesByTarget: Record<string, Resource[]>;
 }) {
+  const [resourcesByTarget, setResourcesByTarget] = useState(initialResourcesByTarget);
   const [selectedNodeId, setSelectedNodeId] = useState<string>(
     nodes[0]?.id ?? ""
   );
+
+  // Poll for background resource updates every 30 seconds
+  // Stops once all understandings have resources
+  useEffect(() => {
+    // Extract curriculum_id from the first node
+    const curriculumId = nodes[0]?.curriculum_id;
+    if (!curriculumId) return;
+
+    let stopped = false;
+
+    async function poll() {
+      const res = await fetch(`/api/curricula/${curriculumId}/progress`);
+      if (!res.ok) return;
+      const data = await res.json() as {
+        total: number;
+        with_resources: number;
+        complete: boolean;
+      };
+
+      if (data.complete) {
+        stopped = true;
+        return;
+      }
+
+      // Refetch all resources for the current node
+      if (selectedNodeId) {
+        const nodeRes = await fetch(`/api/resources?node_id=${selectedNodeId}`);
+        if (nodeRes.ok) {
+          const nodeData = await nodeRes.json();
+          // Also fetch MU resources
+          const currentNode = nodes.find((n) => n.id === selectedNodeId);
+          if (currentNode) {
+            const muFetches = currentNode.major_understandings.map(async (mu) => {
+              const muRes = await fetch(
+                `/api/resources?major_understanding_id=${mu.id}`
+              );
+              if (muRes.ok) {
+                const muData = await muRes.json();
+                setResourcesByTarget((prev) => ({
+                  ...prev,
+                  [`mu:${mu.id}`]: muData.resources,
+                }));
+              }
+            });
+            await Promise.all(muFetches);
+          }
+          setResourcesByTarget((prev) => ({
+            ...prev,
+            [`node:${selectedNodeId}`]: nodeData.resources,
+          }));
+        }
+      }
+    }
+
+    const interval = setInterval(() => {
+      if (!stopped) poll();
+      else clearInterval(interval);
+    }, 30000);
+
+    // Run once immediately on mount
+    poll();
+
+    return () => {
+      stopped = true;
+      clearInterval(interval);
+    };
+  }, [nodes, selectedNodeId]);
 
   const selectedNode = useMemo(
     () => nodes.find((n) => n.id === selectedNodeId),
@@ -248,6 +316,11 @@ export function CurriculumViewer({
                         </div>
                     );
                     })()}
+                    {muResources.length === 0 && (
+                      <p className="text-xs text-[#8A8578] mt-1 italic">
+                        Finding resources…
+                      </p>
+                    )}
                   </div>
                 );
               })}

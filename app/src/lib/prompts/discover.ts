@@ -33,3 +33,43 @@ Rules:
 
 Return only the JSON array.`;
 }
+
+export function buildTopicBatchPrompt(
+  node: NodeWithChildren
+): string {
+  const understandings = node.major_understandings
+    .map((mu) => `- ${mu.code ?? mu.external_key}: ${mu.description}`)
+    .join("\n");
+
+  return `You are helping curate an educational resource guide for high school students.
+
+The topic is "${node.title}" from the ${node.curriculum_id ? "curriculum" : "NYS Regents Chemistry"} course.
+
+Here are the specific concepts students need to understand within this topic:
+${understandings}
+
+Search the web and find the best freely available resources for EACH concept listed above.
+
+Return ONLY a JSON object, no other text, no markdown backticks:
+{
+  "topic_resources": [
+    {
+      "url": "...",
+      "title": "...",
+      "resource_type": "video|text|textbook|problem_set|reference_tool|practice_exam|other",
+      "source_domain": "...",
+      "ai_note": "one sentence why this is useful",
+      "license_status": "cc_open|link_only",
+      "understanding_codes": ["3.1a", "3.1b"] // which concepts this resource covers
+    }
+  ]
+}
+
+Rules:
+- Find 8-12 resources total that collectively cover all the concepts
+- Each resource should list which understanding codes it covers in understanding_codes
+- If a resource covers the whole topic generally, list all codes
+- Prioritize: jmap.org, regentsprep.org, mrpalermo.com, openstax.org, khanacademy.org, chem.libretexts.org, ck12.org, ocw.mit.edu
+- Only freely accessible resources, no login or payment required
+- Return only the JSON object`;
+}
