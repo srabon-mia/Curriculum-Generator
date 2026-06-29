@@ -1,6 +1,7 @@
 import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { buildSkeletonPrompt } from "@/lib/prompts/skeleton";
 import { buildDiscoverPrompt, buildTopicBatchPrompt } from "@/lib/prompts/discover";
+import { buildSourceDiscoveryPrompt } from "@/lib/prompts/sources";
 import type { NodeWithChildren } from "@/lib/curriculum-data";
 
 export const maxDuration = 300;
@@ -191,7 +192,43 @@ export async function GET(
           nodeIds.push({ nodeId: nodeRow.id, node });
         }
 
-        // Step 3: Discover topic-level resources during generation
+        // Step 3: Discover best sources for this subject/difficulty
+        send(controller, "status", {
+          message: "Finding the best sources for this subject…",
+          step: "sources",
+        });
+
+        type DiscoveredSource = {
+          domain: string;
+          name: string;
+          why: string;
+          best_for: string;
+        };
+
+        let discoveredSources: DiscoveredSource[] = [];
+
+        try {
+          const sourcesPrompt = buildSourceDiscoveryPrompt(
+            curriculumTitle,
+            notes.difficulty ?? "standard",
+            notes.learning_goal ?? "understand the subject"
+          );
+
+          // No web search needed — Claude already knows which sites are good
+          const sourcesText = await callClaude(sourcesPrompt, false);
+          const jsonMatch = sourcesText.match(/\[[\s\S]*\]/);
+          if (jsonMatch) {
+            discoveredSources = JSON.parse(jsonMatch[0]) as DiscoveredSource[];
+            console.log(
+              `Discovered ${discoveredSources.length} sources:`,
+              discoveredSources.map((s) => s.domain).join(", ")
+            );
+          }
+        } catch (err) {
+          console.log("Source discovery failed, continuing without prioritized sources:", err);
+        }
+
+        // Step 4: Discover topic-level resources during generation
         for (let i = 0; i < nodeIds.length; i++) {
           const { nodeId, node } = nodeIds[i];
 
@@ -217,7 +254,8 @@ export async function GET(
               "topic",
               undefined,
               undefined,
-              curriculumTitle
+              curriculumTitle,
+              discoveredSources.map((s) => s.domain)
             );
 
             const topicText = await callClaude(topicPrompt, true);
@@ -321,7 +359,8 @@ export async function GET(
                     order_index: 0,
                   })),
                 } as NodeWithChildren,
-                bgCurriculumTitle
+                bgCurriculumTitle,
+                discoveredSources.map((s) => s.domain)
               );
 
               const text = await callClaude(prompt, true);

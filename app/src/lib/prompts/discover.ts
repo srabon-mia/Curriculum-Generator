@@ -5,45 +5,57 @@ export function buildDiscoverPrompt(
   granularity: "topic" | "understanding",
   understandingCode?: string,
   understandingDescription?: string,
-  curriculumTitle?: string
+  curriculumTitle?: string,
+  prioritizedDomains?: string[]
 ): string {
   const courseContext = curriculumTitle ?? "the course";
-  
+
   const context =
     granularity === "topic"
       ? `The topic is "${node.title}" from the course "${courseContext}". Resources must be specifically about this topic in the context of ${courseContext}.`
       : `The specific concept is "${understandingCode}: ${understandingDescription}" from the "${node.title}" topic in "${courseContext}".`;
 
-  return `You are helping curate an educational resource guide for high school chemistry students.
+  const domainGuidance =
+    prioritizedDomains && prioritizedDomains.length > 0
+      ? `Prioritize these domains which are known to be excellent for this subject: ${prioritizedDomains.join(", ")}. Search these first before looking elsewhere.`
+      : `Prioritize well-known, reputable educational sources for this subject.`;
+
+  return `You are helping curate an educational resource guide for students.
 
 ${context}
 
-Search the web and find the best freely available resources for this. Return ONLY a JSON array, no other text, no markdown backticks. Each item in the array should have exactly these fields:
+Search the web and find the best freely available resources for this. Return ONLY a JSON array, no other text, no markdown backticks. Each item should have exactly these fields:
 - url: the full URL
 - title: the page/video title
 - resource_type: one of "video", "text", "textbook", "problem_set", "reference_tool", "practice_exam", "other"
 - source_domain: just the domain name (e.g. "jmap.org")
 - ai_note: one sentence explaining why this resource is useful here specifically
-- license_status: "cc_open" if you can confirm it's Creative Commons or openly licensed, otherwise "link_only"
+- license_status: "cc_open" if Creative Commons or openly licensed, otherwise "link_only"
 
 Rules:
-- Find 3-5 learning resources (explanations, videos, readings) AND 2-4 practice problem sources separately
-- Prioritize: jmap.org, regentsprep.org, mrpalermo.com, openstax.org, ocw.mit.edu, khanacademy.org, chem.libretexts.org, ck12.org
+- Find 3-5 learning resources (explanations, videos, readings) AND 2-4 practice problem sources
+- ${domainGuidance}
 - Only include resources that actually exist and are freely accessible
 - Do not include resources that require login or payment
-- Do not generate or summarize content yourself — only find real external URLs
-- Be specific: a link to a specific page/video for this topic, not a homepage
+- Be specific: link to a specific page/video for this topic, not a homepage
+- Match the difficulty level of the course — don't include beginner resources for advanced courses
 
 Return only the JSON array.`;
 }
 
 export function buildTopicBatchPrompt(
   node: NodeWithChildren,
-  curriculumTitle: string
+  curriculumTitle: string,
+  prioritizedDomains?: string[]
 ): string {
   const understandings = node.major_understandings
     .map((mu) => `- ${mu.code ?? mu.external_key}: ${mu.description}`)
     .join("\n");
+
+  const domainGuidance =
+    prioritizedDomains && prioritizedDomains.length > 0
+      ? `Prioritize these domains which are known to be excellent for this subject: ${prioritizedDomains.join(", ")}. Search these sites first before looking elsewhere.`
+      : `Prioritize well-known, reputable educational sources for this subject.`;
 
   return `You are helping curate an educational resource guide for students.
 
@@ -53,7 +65,9 @@ The topic within that course is: "${node.title}"
 Here are the specific concepts students need to understand within this topic:
 ${understandings}
 
-Search the web and find the best freely available resources for EACH concept listed above. Make sure resources are specifically about "${node.title}" in the context of "${curriculumTitle}" — not just any resource that matches the topic name.
+Search the web and find the best freely available resources for EACH concept listed above. Make sure resources are specifically about "${node.title}" in the context of "${curriculumTitle}" and match the difficulty level of that course.
+
+${domainGuidance}
 
 Return ONLY a JSON object, no other text, no markdown backticks:
 {
@@ -75,5 +89,6 @@ Rules:
 - Each resource should list which understanding codes it covers in understanding_codes
 - If a resource covers the whole topic generally, list all codes
 - Only freely accessible resources, no login or payment required
+- Match difficulty to the course level — advanced courses need advanced resources
 - Return only the JSON object`;
 }

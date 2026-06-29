@@ -45,6 +45,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Node not found" }, { status: 404 });
   }
 
+  const { data: curriculumRow } = await supabase
+    .from("curricula")
+    .select("title")
+    .eq("id", curriculum_id)
+    .single();
+
+  const curriculumTitle = curriculumRow?.title ?? "the course";
+
   const mu = major_understanding_id
     ? node.major_understandings.find((m) => m.id === major_understanding_id)
     : null;
@@ -55,7 +63,9 @@ export async function POST(request: Request) {
     node,
     granularity ?? "topic",
     mu?.code ?? undefined,
-    mu?.description ?? undefined
+    mu?.description ?? undefined,
+    curriculumTitle,
+    []
   );
 
   let anthropicData;
