@@ -4,12 +4,15 @@ export function buildDiscoverPrompt(
   node: NodeWithChildren,
   granularity: "topic" | "understanding",
   understandingCode?: string,
-  understandingDescription?: string
+  understandingDescription?: string,
+  curriculumTitle?: string
 ): string {
+  const courseContext = curriculumTitle ?? "the course";
+  
   const context =
     granularity === "topic"
-      ? `The topic is "${node.title}" from the NYS Regents Physical Setting/Chemistry curriculum (legacy 10-topic format). This is being taught at a specialized high school level (harder than standard Regents — deeper derivations, more rigorous problem solving, less rote memorization).`
-      : `The specific concept is "${understandingCode}: ${understandingDescription}" from the "${node.title}" topic in NYS Regents Physical Setting/Chemistry (legacy format), taught at specialized high school honors level.`;
+      ? `The topic is "${node.title}" from the course "${courseContext}". Resources must be specifically about this topic in the context of ${courseContext}.`
+      : `The specific concept is "${understandingCode}: ${understandingDescription}" from the "${node.title}" topic in "${courseContext}".`;
 
   return `You are helping curate an educational resource guide for high school chemistry students.
 
@@ -35,20 +38,22 @@ Return only the JSON array.`;
 }
 
 export function buildTopicBatchPrompt(
-  node: NodeWithChildren
+  node: NodeWithChildren,
+  curriculumTitle: string
 ): string {
   const understandings = node.major_understandings
     .map((mu) => `- ${mu.code ?? mu.external_key}: ${mu.description}`)
     .join("\n");
 
-  return `You are helping curate an educational resource guide for high school students.
+  return `You are helping curate an educational resource guide for students.
 
-The topic is "${node.title}" from the ${node.curriculum_id ? "curriculum" : "NYS Regents Chemistry"} course.
+The course is: "${curriculumTitle}"
+The topic within that course is: "${node.title}"
 
 Here are the specific concepts students need to understand within this topic:
 ${understandings}
 
-Search the web and find the best freely available resources for EACH concept listed above.
+Search the web and find the best freely available resources for EACH concept listed above. Make sure resources are specifically about "${node.title}" in the context of "${curriculumTitle}" — not just any resource that matches the topic name.
 
 Return ONLY a JSON object, no other text, no markdown backticks:
 {
@@ -60,7 +65,7 @@ Return ONLY a JSON object, no other text, no markdown backticks:
       "source_domain": "...",
       "ai_note": "one sentence why this is useful",
       "license_status": "cc_open|link_only",
-      "understanding_codes": ["3.1a", "3.1b"] // which concepts this resource covers
+      "understanding_codes": ["1.1", "1.2"]
     }
   ]
 }
@@ -69,7 +74,6 @@ Rules:
 - Find 8-12 resources total that collectively cover all the concepts
 - Each resource should list which understanding codes it covers in understanding_codes
 - If a resource covers the whole topic generally, list all codes
-- Prioritize: jmap.org, regentsprep.org, mrpalermo.com, openstax.org, khanacademy.org, chem.libretexts.org, ck12.org, ocw.mit.edu
 - Only freely accessible resources, no login or payment required
 - Return only the JSON object`;
 }

@@ -1,20 +1,22 @@
 import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { buildSkeletonPrompt } from "@/lib/prompts/skeleton";
 import { buildDiscoverPrompt, buildTopicBatchPrompt } from "@/lib/prompts/discover";
+import type { NodeWithChildren } from "@/lib/curriculum-data";
+
+export const maxDuration = 300;
 
 const supabase = createServiceClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-export const maxDuration = 300;
-
-async function callClaude(prompt: string, useSearch = true) {
+async function callClaude(prompt: string, useSearch = true): Promise<string> {
   let lastErr = "";
 
   for (let attempt = 0; attempt < 4; attempt++) {
     if (attempt > 0) {
       const waitMs = attempt * 30000;
+      console.log(`Rate limited, waiting ${waitMs / 1000}s before retry ${attempt}...`);
       await new Promise((r) => setTimeout(r, waitMs));
     }
 
@@ -54,13 +56,6 @@ async function callClaude(prompt: string, useSearch = true) {
   }
 
   throw new Error(`Rate limited after retries: ${lastErr}`);
-}
-
-function extractJSON(text: string, arrayMode = false): unknown {
-  const pattern = arrayMode ? /\[[\s\S]*\]/ : /\{[\s\S]*\}/;
-  const match = text.match(pattern);
-  if (!match) throw new Error("No JSON found in response");
-  return JSON.parse(match[0]);
 }
 
 export async function GET(
@@ -117,23 +112,28 @@ export async function GET(
 
         const skeletonText = await callClaude(skeletonPrompt, true);
 
-        let skeleton: {
+        type SkeletonNode = {
+          title: string;
+          order_index: number;
+          major_understandings: Array<{
+            code: string | null;
+            description: string;
+          }>;
+        };
+
+        type Skeleton = {
           title: string;
           source_type: string;
           source_attribution: string | null;
           source_url: string | null;
-          nodes: Array<{
-            title: string;
-            order_index: number;
-            major_understandings: Array<{
-              code: string | null;
-              description: string;
-            }>;
-          }>;
+          nodes: SkeletonNode[];
         };
 
+        let skeleton: Skeleton;
         try {
-          skeleton = extractJSON(skeletonText) as typeof skeleton;
+          const jsonMatch = skeletonText.match(/\{[\s\S]*\}/);
+          if (!jsonMatch) throw new Error("No JSON found");
+          skeleton = JSON.parse(jsonMatch[0]) as Skeleton;
         } catch {
           send(controller, "error", {
             message: "Failed to generate curriculum structure",
@@ -153,6 +153,8 @@ export async function GET(
           })
           .eq("id", id);
 
+        const curriculumTitle = skeleton.title;
+
         send(controller, "skeleton", {
           title: skeleton.title,
           topic_count: skeleton.nodes.length,
@@ -161,7 +163,7 @@ export async function GET(
         // Step 2: Insert nodes and major understandings
         const nodeIds: Array<{
           nodeId: string;
-          node: (typeof skeleton.nodes)[0];
+          node: SkeletonNode;
         }> = [];
 
         for (const node of skeleton.nodes) {
@@ -189,7 +191,7 @@ export async function GET(
           nodeIds.push({ nodeId: nodeRow.id, node });
         }
 
-        // Step 3: Discover resources per topic
+        // Step 3: Discover topic-level resources during generation
         for (let i = 0; i < nodeIds.length; i++) {
           const { nodeId, node } = nodeIds[i];
 
@@ -200,77 +202,75 @@ export async function GET(
             total: nodeIds.length,
           });
 
-          // Get the inserted MUs for this node
-          const { data: muRows } = await supabase
-            .from("major_understandings")
-            .select("id, code, description")
-            .eq("node_id", nodeId);
-
-          if (!muRows) continue;
-
-          // Discover topic-level resources
           try {
             const topicPrompt = buildDiscoverPrompt(
-                {
-                    id: nodeId,
-                    curriculum_id: id,
-                    external_key: null,
-                    title: node.title,
-                    order_index: node.order_index,
-                    exam_weight_pct: null,
-                    claim_statement: null,
-                    major_understandings: (muRows ?? []).map((mu) => ({
-                    id: mu.id,
-                    node_id: nodeId,
-                    external_key: mu.code ?? null,
-                    code: mu.code ?? null,
-                    description: mu.description,
-                    order_index: 0,
-                    })),
-                } as import("@/lib/curriculum-data").NodeWithChildren,
-                "topic"
+              {
+                id: nodeId,
+                curriculum_id: id,
+                external_key: null,
+                title: node.title,
+                order_index: node.order_index,
+                exam_weight_pct: null,
+                claim_statement: null,
+                major_understandings: [],
+              } as NodeWithChildren,
+              "topic",
+              undefined,
+              undefined,
+              curriculumTitle
             );
 
             const topicText = await callClaude(topicPrompt, true);
-            const candidates = extractJSON(topicText, true) as Array<{
+            console.log(`Topic text for "${node.title}":`, topicText.slice(0, 200));
+
+            const jsonMatch = topicText.match(/\[[\s\S]*\]/);
+            if (!jsonMatch) {
+              console.log(`No JSON array found for topic "${node.title}", skipping`);
+              continue;
+            }
+
+            let candidates: Array<{
               url: string;
               title: string;
               resource_type: string;
               source_domain: string;
               ai_note: string;
               license_status: string;
-            }>;
+            }> = [];
 
-            if (Array.isArray(candidates)) {
-              const resources = candidates
-                .filter((c) => c.url && c.title)
-                .map((c) => ({
-                  node_id: nodeId,
-                  major_understanding_id: null,
-                  url: c.url,
-                  title: c.title,
-                  source_domain: c.source_domain ?? "",
-                  resource_type: c.resource_type ?? "other",
-                  license_status: c.license_status ?? "link_only",
-                  embed_allowed: false,
-                  ai_note: c.ai_note ?? null,
-                  content_type_verified: true,
-                  status: "approved", // auto-approve for user-generated curricula
-                }));
+            try {
+              candidates = JSON.parse(jsonMatch[0]);
+              if (!Array.isArray(candidates)) continue;
+            } catch {
+              console.log(`Parse failed for topic "${node.title}", skipping`);
+              continue;
+            }
 
-              if (resources.length > 0) {
-                await supabase.from("resources").insert(resources);
-              }
+            const resources = candidates
+              .filter((c) => c.url && c.title)
+              .map((c) => ({
+                node_id: nodeId,
+                major_understanding_id: null,
+                url: c.url,
+                title: c.title,
+                source_domain: c.source_domain ?? "",
+                resource_type: c.resource_type ?? "other",
+                license_status: c.license_status ?? "link_only",
+                embed_allowed: false,
+                ai_note: c.ai_note ?? null,
+                content_type_verified: true,
+                status: "approved",
+              }));
+
+            if (resources.length > 0) {
+              await supabase.from("resources").insert(resources);
             }
           } catch (err) {
             console.log(`Resource discovery failed for topic "${node.title}":`, err);
-            // Continue to next topic
           }
 
-          // Delay between topics to avoid rate limiting
-          // 45s gives the token bucket time to refill between web search calls
           if (i < nodeIds.length - 1) {
-            await new Promise((r) => setTimeout(r, 45000));
+            await new Promise((r) => setTimeout(r, 15000));
           }
         }
 
@@ -282,10 +282,16 @@ export async function GET(
 
         send(controller, "complete", { curriculum_id: id });
 
-        // Kick off background per-understanding discovery
-        // Fire and forget — don't await, let it run after the stream closes
-        // Background per-understanding discovery — one call per topic
+        // Background per-understanding discovery — one batch call per topic
         (async () => {
+          const { data: curriculumRow } = await supabase
+            .from("curricula")
+            .select("title")
+            .eq("id", id)
+            .single();
+
+          const bgCurriculumTitle = curriculumRow?.title ?? curriculumTitle;
+
           for (let i = 0; i < nodeIds.length; i++) {
             const { nodeId, node } = nodeIds[i];
 
@@ -297,27 +303,33 @@ export async function GET(
             if (!muRows || muRows.length === 0) continue;
 
             try {
-              const prompt = buildTopicBatchPrompt({
-                id: nodeId,
-                curriculum_id: id,
-                external_key: null,
-                title: node.title,
-                order_index: node.order_index,
-                exam_weight_pct: null,
-                claim_statement: null,
-                major_understandings: muRows.map((m) => ({
-                  id: m.id,
-                  node_id: nodeId,
-                  external_key: m.external_key ?? m.code ?? null,
-                  code: m.code ?? null,
-                  description: m.description,
-                  order_index: 0,
-                })),
-              } as import("@/lib/curriculum-data").NodeWithChildren);
+              const prompt = buildTopicBatchPrompt(
+                {
+                  id: nodeId,
+                  curriculum_id: id,
+                  external_key: null,
+                  title: node.title,
+                  order_index: node.order_index,
+                  exam_weight_pct: null,
+                  claim_statement: null,
+                  major_understandings: muRows.map((m) => ({
+                    id: m.id,
+                    node_id: nodeId,
+                    external_key: m.external_key ?? m.code ?? null,
+                    code: m.code ?? null,
+                    description: m.description,
+                    order_index: 0,
+                  })),
+                } as NodeWithChildren,
+                bgCurriculumTitle
+              );
 
               const text = await callClaude(prompt, true);
               const jsonMatch = text.match(/\{[\s\S]*\}/);
-              if (!jsonMatch) continue;
+              if (!jsonMatch) {
+                console.log(`No JSON object found for batch topic "${node.title}"`);
+                continue;
+              }
 
               const parsed = JSON.parse(jsonMatch[0]) as {
                 topic_resources: Array<{
@@ -336,7 +348,6 @@ export async function GET(
               for (const candidate of parsed.topic_resources) {
                 if (!candidate.url || !candidate.title) continue;
 
-                // Find which MUs this resource covers
                 const coveredMuIds = muRows
                   .filter((mu) =>
                     candidate.understanding_codes?.some(
@@ -345,9 +356,10 @@ export async function GET(
                   )
                   .map((mu) => mu.id);
 
-                // If no specific understandings matched, attach to all of them
                 const targetMuIds =
-                  coveredMuIds.length > 0 ? coveredMuIds : muRows.map((m) => m.id);
+                  coveredMuIds.length > 0
+                    ? coveredMuIds
+                    : muRows.map((m) => m.id);
 
                 const resources = targetMuIds.map((muId) => ({
                   node_id: null,
@@ -371,7 +383,6 @@ export async function GET(
               console.log(`Batch discovery failed for topic "${node.title}":`, err);
             }
 
-            // 15 seconds between topics — much faster than per-understanding
             if (i < nodeIds.length - 1) {
               await new Promise((r) => setTimeout(r, 15000));
             }
@@ -381,7 +392,8 @@ export async function GET(
         controller.close();
       } catch (err) {
         send(controller, "error", {
-          message: err instanceof Error ? err.message : "Something went wrong",
+          message:
+            err instanceof Error ? err.message : "Something went wrong",
         });
         controller.close();
       }
